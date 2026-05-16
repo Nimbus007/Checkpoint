@@ -308,7 +308,27 @@
     </main>
   </div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    const firebaseConfig = {
+  apiKey: "AIzaSyAIbiCKrpp65XcTj00hEutQAhPwpQF0eGs",
+  authDomain: "task-list-65591.firebaseapp.com",
+  databaseURL: "https://task-list-65591-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "task-list-65591",
+  storageBucket: "task-list-65591.firebasestorage.app",
+  messagingSenderId: "654593976997",
+  appId: "1:654593976997:web:89591726e290c56fb93b4c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
     const peso = new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP'});
     const storeKey = 'artCheckpointV1';
     let activePay = 'first';
@@ -323,7 +343,7 @@
       events:[]
     };
 
-    let data = loadData();
+    let data = structuredClone(defaultData);
 
     const gymRoutine = [
       {day:'Day 1: Push Day', area:'Chest / Shoulders / Triceps', note:'Focus on controlling the eccentric lowering phase for 2-3 seconds.', exercises:['Dumbbell Incline Bench Press: 4 sets × 8-10 reps (rest 90s)','Cable Chest Flyes: 3 sets × 10-12 reps (rest 60s)','Machine Chest Press: 3 sets × 10-12 reps (rest 60s)','Seated Dumbbell Shoulder Press: 3 sets × 8-10 reps (rest 90s)','Cable Lateral Raises (Single Arm): 3 sets × 12-15 reps (rest 60s)','Cable Triceps Rope Pushdown: 3 sets × 10-12 reps (rest 60s)','Dumbbell Overhead Triceps Extension: 3 sets × 10-12 reps (rest 60s)']},
@@ -337,7 +357,20 @@
       try{return {...structuredClone(defaultData), ...(JSON.parse(localStorage.getItem(storeKey)) || {})};}
       catch{return structuredClone(defaultData)}
     }
-    function save(){localStorage.setItem(storeKey, JSON.stringify(data)); renderAll();}
+    async function save(){
+
+  localStorage.setItem(storeKey, JSON.stringify(data));
+
+  await setDoc(
+    doc(db, "dashboardBackups", "checkpoint"),
+    data
+  );
+
+  renderAll();
+
+  console.log("Saved to Firebase");
+
+}
     function money(n){return peso.format(Number(n || 0));}
     function val(id){return document.getElementById(id).value.trim();}
     function num(id){return Number(document.getElementById(id).value || 0);}
@@ -346,10 +379,45 @@
       document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
+     if(btn){
+  btn.classList.add('active');
+}
       renderAll();
     }
+async function loadFirebaseData(){
 
+  try{
+
+    const docRef = doc(db, "dashboardBackups", "checkpoint");
+
+    const snapshot = await getDoc(docRef);
+
+    if(snapshot.exists()){
+
+      data = snapshot.data();
+
+      console.log("Firebase data loaded");
+
+    }else{
+
+      data = loadData();
+
+      console.log("Using local storage backup");
+
+    }
+
+    renderAll();
+
+  }catch(error){
+
+    console.error(error);
+
+    data = loadData();
+
+    renderAll();
+  }
+
+}
     function updateClock(){
       const now = new Date();
       document.getElementById('todayText').textContent = now.toLocaleDateString('en-PH',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
@@ -527,7 +595,7 @@
 
     function renderAll(){renderBills();renderExpenses();renderWallets();renderGym();renderCalendar();renderStats();renderCharts();}
     window.addEventListener('resize', renderCharts);
-    renderAll();
+    loadFirebaseData();
   </script>
 </body>
 </html>
