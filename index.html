@@ -357,20 +357,28 @@ const db = getFirestore(app);
       try{return {...structuredClone(defaultData), ...(JSON.parse(localStorage.getItem(storeKey)) || {})};}
       catch{return structuredClone(defaultData)}
     }
-    async function save(shouldRender = true){
+  async function save(shouldRender = true){
 
   localStorage.setItem(storeKey, JSON.stringify(data));
 
-  await setDoc(
-    doc(db, "dashboardBackups", "checkpoint"),
-    data
-  );
-if(shouldRender){
-  renderAll();
-}
+  try{
 
-console.log("Saved to Firebase");
+    await setDoc(
+      doc(db, "dashboardBackups", "checkpoint"),
+      data
+    );
 
+    console.log("Saved to Firebase");
+
+  }catch(error){
+
+    console.error("Firebase save failed, but local save worked:", error);
+
+  }
+
+  if(shouldRender){
+    renderAll();
+  }
 }
     function money(n){return peso.format(Number(n || 0));}
     function val(id){return document.getElementById(id).value.trim();}
@@ -445,6 +453,9 @@ async function loadFirebaseData(){
   const name = val('expenseName');
   const amount = num('expenseAmount');
   const source = val('expensePaySource');
+  if(!source){
+  return alert('Please choose a wallet/source first.');
+}
 
   if(!name || amount <= 0){
     return alert('Add an expense name and amount first.');
@@ -477,6 +488,21 @@ async function loadFirebaseData(){
     function deleteExpense(id){
   data.expenses = data.expenses.filter(x => x.id !== id);
   save();
+}
+    function resetExpenses(){
+  if(confirm('Reset all expenses?')){
+    data.expenses = [];
+    save();
+  }
+}
+
+function updateWallet(key, value){
+  data.wallets[key] = Number(value || 0);
+  save(false);
+  document.getElementById('walletTotal').textContent =
+    money(Object.values(data.wallets).reduce((s,v)=>s+Number(v||0),0));
+  document.getElementById('portalWallet').textContent =
+    document.getElementById('walletTotal').textContent;
 }
     function resetWallets(){if(confirm('Reset all wallet amounts?')){Object.keys(data.wallets).forEach(k=>data.wallets[k]=0);save();}}
 
