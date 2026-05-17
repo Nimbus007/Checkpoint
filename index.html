@@ -244,14 +244,14 @@
           <div class="expense-form">
             <div><label>What did you spend on?</label><input id="expenseName" placeholder="Food, Load, Orders, Luxury" /></div>
             <div><label>Amount</label><input id="expenseAmount" type="number" min="0" step="0.01" placeholder="0.00" /></div>
-            <div><label>Used From</label><select id="expensePaySource"><option value="first">First Semi-Monthly Pay</option><option value="second">Second Semi-Monthly Pay</option></select></div>
+            <div><label>Used From</label><select id="expensePaySource"></select></div>
             <button class="btn" onclick="addExpense()">Add Expense</button>
           </div>
 
           <div class="grid grid-3" style="margin-top:18px">
             <div class="summary-box"><span>Total Expenses</span><strong id="expenseTotal">₱0.00</strong></div>
-            <div class="summary-box"><span>First Pay Expenses</span><strong id="firstExpenseTotal">₱0.00</strong></div>
-            <div class="summary-box"><span>Second Pay Expenses</span><strong id="secondExpenseTotal">₱0.00</strong></div>
+            <div class="summary-box"><span>Wallet Expenses</span><strong id="firstExpenseTotal">₱0.00</strong></div>
+            <div class="summary-box"><span>Available Wallet Money</span><strong id="secondExpenseTotal">₱0.00</strong></div>
           </div>
 
           <table style="margin-top:18px">
@@ -440,19 +440,43 @@ async function loadFirebaseData(){
     function deleteBill(id){data.bills=data.bills.filter(x=>x.id!==id); save();}
     function resetBills(){if(confirm('Reset all bills?')){data.bills=[];data.pays={first:0,second:0};save();}}
 
-    function addExpense(){
-      const name = val('expenseName'); const amount = num('expenseAmount'); const source = val('expensePaySource');
-      if(!name || amount <= 0) return alert('Add an expense name and amount first. Spending mystery money is how chaos gets a promotion.');
-      data.expenses.push({id:crypto.randomUUID(), name, amount, source, date:new Date().toISOString()});
-      document.getElementById('expenseName').value=''; document.getElementById('expenseAmount').value='';
-      save();
-    }
-    function deleteExpense(id){data.expenses=data.expenses.filter(x=>x.id!==id); save();}
-    function resetExpenses(){if(confirm('Reset all expenses?')){data.expenses=[];save();}}
+   function addExpense(){
 
-   function updateWallet(key,value){
-  data.wallets[key]=Number(value||0);
-  save(false);
+  const name = val('expenseName');
+  const amount = num('expenseAmount');
+  const source = val('expensePaySource');
+
+  if(!name || amount <= 0){
+    return alert('Add an expense name and amount first.');
+  }
+
+  if(data.wallets[source] === undefined){
+    return alert('Choose a valid wallet/source.');
+  }
+
+  if(Number(data.wallets[source] || 0) < amount){
+    return alert('Not enough money in this wallet.');
+  }
+
+  data.wallets[source] =
+    Number(data.wallets[source] || 0) - amount;
+
+  data.expenses.push({
+    id: crypto.randomUUID(),
+    name,
+    amount,
+    source,
+    date: new Date().toISOString()
+  });
+
+  document.getElementById('expenseName').value = '';
+  document.getElementById('expenseAmount').value = '';
+
+  save();
+}
+    function deleteExpense(id){
+  data.expenses = data.expenses.filter(x => x.id !== id);
+  save();
 }
     function resetWallets(){if(confirm('Reset all wallet amounts?')){Object.keys(data.wallets).forEach(k=>data.wallets[k]=0);save();}}
 
@@ -490,14 +514,30 @@ async function loadFirebaseData(){
     }
 
     function renderExpenses(){
+      const walletNames = {
+  MoneyLeft:'Money Left',
+  Gcash:'Gcash',
+  Unionbank:'UnionBank',
+  Cash:'Cash',
+  SecurityBank:'Security Bank',
+  MoneyFromOtherPeople:'Money from other People'
+};
+
+const sourceSelect = document.getElementById('expensePaySource');
+
+sourceSelect.innerHTML = Object.keys(data.wallets).map(k =>
+  `<option value="${k}">${walletNames[k] || k}</option>`
+).join('');
       const total=data.expenses.reduce((s,e)=>s+Number(e.amount),0);
-      const first=data.expenses.filter(e=>e.source==='first').reduce((s,e)=>s+Number(e.amount),0);
-      const second=data.expenses.filter(e=>e.source==='second').reduce((s,e)=>s+Number(e.amount),0);
+      const first = total;
+
+const second = Object.values(data.wallets)
+  .reduce((s,v)=>s + Number(v || 0),0);
       document.getElementById('expenseTotal').textContent=money(total);
       document.getElementById('firstExpenseTotal').textContent=money(first);
       document.getElementById('secondExpenseTotal').textContent=money(second);
       document.getElementById('expenseRows').innerHTML = data.expenses.map(e=>`<tr>
-        <td>${escapeHTML(e.name)}</td><td>${money(e.amount)}</td><td>${e.source==='first'?'First Pay':'Second Pay'}</td><td>${new Date(e.date).toLocaleDateString()}</td>
+        <td>${escapeHTML(e.name)}</td><td>${money(e.amount)}</td><td>${walletNames[e.source] || e.source}</td><td>${new Date(e.date).toLocaleDateString()}</td>
         <td><button class="btn danger" onclick="deleteExpense('${e.id}')">Delete</button></td>
       </tr>`).join('') || `<tr><td colspan="5" class="muted">No expenses yet.</td></tr>`;
     }
