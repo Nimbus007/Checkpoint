@@ -6,149 +6,418 @@
   <title>Art Ando CheckPoint</title>
   <style>
     :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --text:#16171d;
-      --muted:#707684;
-      --line:#d9dde8;
-      --primary:#111827;
-      --soft:#eef1f8;
+      --bg:#f4f6fb;
+      --panel:#ffffff;
+      --panel-strong:#f8fafc;
+      --text:#111827;
+      --muted:#667085;
+      --line:#d8dee9;
+      --primary:#0f172a;
+      --primary-2:#2563eb;
+      --soft:#eef4ff;
       --good:#16a34a;
       --bad:#dc2626;
       --warn:#f59e0b;
-      --radius:22px;
-      --shadow:0 18px 45px rgba(15,23,42,.08);
+      --radius:16px;
+      --shadow:0 16px 36px rgba(15,23,42,.08);
+      --focus:0 0 0 4px rgba(37,99,235,.16);
     }
 
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:Inter,Segoe UI,Arial,sans-serif;
-      background:linear-gradient(135deg,#f8fafc,#eef2ff);
+      background:
+        radial-gradient(circle at top left,rgba(37,99,235,.10),transparent 34rem),
+        linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);
       color:var(--text);
+      min-height:100vh;
     }
 
     button,input,select,textarea{font:inherit}
     button{cursor:pointer;border:none}
-    .app{max-width:1450px;margin:0 auto;padding:28px}
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;
+      background:white;
+      color:var(--text);
+      outline:none;
+      transition:border-color .15s ease,box-shadow .15s ease;
+    }
+    input:focus,select:focus,textarea:focus{border-color:var(--primary-2);box-shadow:var(--focus)}
+    textarea{min-height:90px;resize:vertical}
+    label{font-weight:800;font-size:12px;color:#344054;display:block;margin-bottom:7px}
+
+    .app{max-width:1440px;margin:0 auto;padding:22px}
 
     .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:18px;
-      padding:20px 22px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);
-      border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
-      position:sticky;top:14px;z-index:10;
+      display:grid;
+      grid-template-columns:minmax(260px,1fr) auto;
+      align-items:center;
+      gap:18px;
+      padding:18px 20px;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(16px);
+      border:1px solid rgba(216,222,233,.95);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:14px;
+      z-index:10;
     }
-    .brand h1{margin:0;font-size:26px;letter-spacing:-.04em}
-    .brand p{margin:5px 0 0;color:var(--muted)}
-    .date-time{display:flex;gap:12px;flex-wrap:wrap}
-    .pill{background:var(--primary);color:white;padding:12px 16px;border-radius:999px;font-weight:800;min-width:150px;text-align:center}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .logo{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:white;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      letter-spacing:-.06em;
+      box-shadow:0 12px 26px rgba(37,99,235,.25);
+      flex:0 0 auto;
+    }
+    .brand h1{margin:0;font-size:24px;letter-spacing:-.04em;line-height:1.05}
+    .brand p{margin:5px 0 0;color:var(--muted);font-size:14px;line-height:1.4}
+    .date-time{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      background:#111827;
+      color:white;
+      padding:11px 14px;
+      border-radius:999px;
+      font-weight:850;
+      min-width:145px;
+      text-align:center;
+      font-size:14px;
+      white-space:nowrap;
+    }
 
+    .layout{
+      display:grid;
+      grid-template-columns:230px minmax(0,1fr);
+      gap:18px;
+      margin-top:18px;
+      align-items:start;
+    }
     .nav{
-      display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:14px;margin:22px 0;
+      display:grid;
+      gap:8px;
+      padding:10px;
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:0 12px 28px rgba(15,23,42,.06);
+      position:sticky;
+      top:112px;
     }
     .nav button{
-      background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;
-      font-weight:800;box-shadow:0 10px 25px rgba(15,23,42,.06);transition:.18s ease;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-align:left;
+      background:transparent;
+      color:#344054;
+      border-radius:14px;
+      padding:12px;
+      font-weight:850;
+      transition:.16s ease;
     }
-    .nav button:hover,.nav button.active{transform:translateY(-2px);background:var(--primary);color:white}
+    .nav button:hover{background:#f1f5f9;color:var(--text)}
+    .nav button.active{background:var(--primary);color:white;box-shadow:0 10px 22px rgba(15,23,42,.18)}
+    .nav .icon{
+      width:28px;
+      height:28px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background:#eef2ff;
+      color:#1e40af;
+      font-size:15px;
+      flex:0 0 auto;
+    }
+    .nav button.active .icon{background:rgba(255,255,255,.16);color:white}
 
     .page{display:none;animation:fade .2s ease}
     .page.active{display:block}
     @keyframes fade{from{opacity:.2;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-    .grid{display:grid;gap:18px}
-    .grid-3{grid-template-columns:repeat(3,1fr)}
-    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid{display:grid;gap:16px}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .card{
-      background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:22px;
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:20px;
     }
-    .card h2,.card h3{margin:0 0 14px;letter-spacing:-.03em}
-    .muted{color:var(--muted)}
-    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .between{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .card h2,.card h3{margin:0 0 12px;letter-spacing:-.03em;line-height:1.1}
+    .card h2{font-size:25px}
+    .card h3{font-size:18px}
+    .muted{color:var(--muted);line-height:1.5}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .between{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 
-    .stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
-    .stat{background:var(--soft);border-radius:18px;padding:18px}
-    .stat span{display:block;color:var(--muted);font-size:13px;margin-bottom:8px}
-    .stat strong{font-size:24px;letter-spacing:-.04em}
-
-    input,select,textarea{
-      width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:white;color:var(--text);
-      outline:none;
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      background:var(--primary);
+      color:white;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:900;
+      min-height:42px;
+      transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+      white-space:nowrap;
     }
-    textarea{min-height:90px;resize:vertical}
-    label{font-weight:800;font-size:13px;color:#343946;display:block;margin-bottom:7px}
-    .btn{background:var(--primary);color:white;border-radius:14px;padding:12px 15px;font-weight:900}
-    .btn.secondary{background:#e5e7eb;color:#111827}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(15,23,42,.12)}
+    .btn.secondary{background:#e9eef6;color:#111827}
     .btn.danger{background:var(--bad);color:white}
     .btn.good{background:var(--good);color:white}
     .btn.warn{background:var(--warn);color:#111827}
 
-    table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:16px}
-    th,td{padding:13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
-    th{font-size:13px;color:var(--muted);background:#f8fafc}
-    tr:last-child td{border-bottom:none}
-
-    .pay-tabs{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-    .pay-tabs button{padding:13px 16px;border-radius:14px;background:#e5e7eb;font-weight:900}
-    .pay-tabs button.active{background:var(--primary);color:white}
-    .pay-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
-    .summary-box{background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:15px}
-    .summary-box span{color:var(--muted);font-size:13px;display:block;margin-bottom:6px}
-    .summary-box strong{font-size:26px}
-
-    .portal-hero{min-height:420px;display:grid;grid-template-columns:1.4fr .9fr;gap:20px}
-    .big-title{font-size:54px;line-height:.95;margin:0;letter-spacing:-.08em}
-    .quick-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
-    .quick-card{padding:22px;border-radius:22px;background:var(--primary);color:white;min-height:130px;display:flex;flex-direction:column;justify-content:space-between}
-    .quick-card span{opacity:.7}
-    .quick-card strong{font-size:28px}
-
-    canvas{width:100%;height:280px;max-height:280px}
-    .chart-wrap{height:320px}
-
-    .wallet-list{display:grid;gap:12px}
-    .wallet-item{display:grid;grid-template-columns:1fr 180px;gap:12px;align-items:end;background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:14px}
-
-    .gym-days{display:grid;grid-template-columns:repeat(5,minmax(250px,1fr));gap:16px;overflow-x:auto;padding-bottom:6px}
-    .gym-day{min-height:540px;background:white;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.05)}
-    .gym-day h3{margin-bottom:6px}
-    .gym-note{font-size:13px;color:var(--muted);font-style:italic;min-height:42px}
-    .exercise{display:flex;gap:10px;padding:11px;border-radius:14px;margin:8px 0;background:#f8fafc;border:1px solid #eef1f5}
-    .exercise input{width:auto;margin-top:3px}
-    .exercise.done{background:#ecfdf5;border-color:#bbf7d0;text-decoration:line-through;color:#166534}
-
-    .calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap}
-    .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
-    .day-name{text-align:center;color:var(--muted);font-size:13px;font-weight:900}
-    .calendar-day{min-height:130px;background:white;border:1px solid var(--line);border-radius:16px;padding:10px;cursor:pointer}
-    .calendar-day:hover{outline:2px solid #111827}
-    .day-num{font-weight:900;margin-bottom:8px}
-    .event-chip{background:#eef2ff;border-radius:10px;padding:6px;margin-top:5px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .empty-day{opacity:.35}
-
-    .expense-form,.bill-form,.event-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end}
-    .bill-form{grid-template-columns:1.2fr 1fr 1fr auto}
-    .event-form{grid-template-columns:1fr 1fr 2fr auto}
-
-    .notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:16px;padding:14px;margin-bottom:16px}
-
-    @media(max-width:1100px){
-      .grid-3,.grid-2,.portal-hero,.stat-grid,.pay-summary{grid-template-columns:1fr}
-      .nav{grid-template-columns:repeat(2,1fr)}
-      .quick-cards{grid-template-columns:1fr}
-      .expense-form,.bill-form,.event-form,.wallet-item{grid-template-columns:1fr}
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(320px,.9fr);
+      gap:16px;
+      align-items:stretch;
     }
-    @media(max-width:650px){.app{padding:12px}.topbar{position:static}.nav{grid-template-columns:1fr}.big-title{font-size:38px}.calendar{gap:5px}.calendar-day{min-height:100px;padding:7px}}
+    .hero-panel{
+      min-height:350px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-panel:after{
+      content:"";
+      position:absolute;
+      right:-90px;
+      top:-110px;
+      width:260px;
+      height:260px;
+      border:46px solid rgba(37,99,235,.08);
+      border-radius:50%;
+      pointer-events:none;
+    }
+    .big-title{
+      max-width:780px;
+      font-size:clamp(38px,5vw,66px);
+      line-height:.94;
+      margin:0;
+      letter-spacing:-.07em;
+    }
+    .hero-copy{max-width:760px;margin:14px 0 0}
+    .quick-cards{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:24px;
+    }
+    .quick-card{
+      padding:16px;
+      border-radius:16px;
+      background:#0f172a;
+      color:white;
+      min-height:112px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      overflow:hidden;
+    }
+    .quick-card:nth-child(2){background:#1d4ed8}
+    .quick-card:nth-child(3){background:#047857}
+    .quick-card span{opacity:.75;font-size:13px;font-weight:750}
+    .quick-card strong{font-size:24px;letter-spacing:-.04em;word-break:break-word}
+
+    .stat-grid{display:grid;grid-template-columns:1fr;gap:10px}
+    .stat{
+      background:var(--panel-strong);
+      border:1px solid #e5eaf3;
+      border-radius:14px;
+      padding:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+    }
+    .stat span{display:block;color:var(--muted);font-size:12px;font-weight:800}
+    .stat strong{font-size:20px;letter-spacing:-.04em;text-align:right}
+
+    .summary-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+    .summary-box{
+      background:var(--panel-strong);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      min-width:0;
+    }
+    .summary-box span{color:var(--muted);font-size:12px;font-weight:800;display:block;margin-bottom:7px}
+    .summary-box strong{font-size:24px;letter-spacing:-.04em;word-break:break-word}
+
+    .pay-tabs{
+      display:flex;
+      gap:8px;
+      margin:16px 0;
+      flex-wrap:wrap;
+      background:#eef2f7;
+      border-radius:14px;
+      padding:5px;
+      width:max-content;
+      max-width:100%;
+    }
+    .pay-tabs button{padding:10px 13px;border-radius:10px;background:transparent;font-weight:900;color:#475467}
+    .pay-tabs button.active{background:white;color:var(--primary);box-shadow:0 6px 14px rgba(15,23,42,.08)}
+
+    .form-grid{display:grid;gap:12px;align-items:end}
+    .expense-form,.bill-form{grid-template-columns:1fr 180px 210px auto}
+    .event-form{grid-template-columns:170px 140px minmax(220px,1fr) auto}
+
+    .table-wrap{overflow:auto;margin-top:16px;border:1px solid var(--line);border-radius:16px;background:white}
+    table{width:100%;border-collapse:collapse;min-width:680px}
+    th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+    th{font-size:12px;color:var(--muted);background:#f8fafc;text-transform:uppercase;letter-spacing:.04em}
+    tr:last-child td{border-bottom:none}
+    td .btn{padding:8px 10px;min-height:36px}
+
+    .chart-grid{margin-top:16px}
+    .chart-wrap{height:330px}
+    canvas{width:100%;height:260px;max-height:260px;display:block}
+
+    .wallet-list{display:grid;gap:10px}
+    .wallet-item{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 160px;
+      gap:12px;
+      align-items:end;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px;
+    }
+    .wallet-item strong{font-size:18px;text-align:right;padding-bottom:11px;word-break:break-word}
+    .wallet-total{
+      font-size:clamp(40px,7vw,64px);
+      font-weight:950;
+      letter-spacing:-.07em;
+      margin-top:28px;
+      word-break:break-word;
+    }
+
+    .gym-days{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(260px,1fr));
+      gap:14px;
+      overflow-x:auto;
+      padding-bottom:6px;
+    }
+    .gym-day{
+      min-height:540px;
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 8px 20px rgba(15,23,42,.05);
+    }
+    .gym-day h3{margin-bottom:6px}
+    .gym-note{font-size:13px;color:var(--muted);min-height:42px}
+    .exercise{
+      display:flex;
+      gap:10px;
+      padding:10px;
+      border-radius:12px;
+      margin:8px 0;
+      background:#f8fafc;
+      border:1px solid #eef1f5;
+      font-weight:650;
+      line-height:1.35;
+    }
+    .exercise input{width:auto;margin-top:2px;box-shadow:none}
+    .exercise.done{background:#ecfdf5;border-color:#bbf7d0;color:#166534}
+    .exercise.done span{text-decoration:line-through}
+
+    .calendar-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+    .calendar-title{min-width:190px;text-align:center}
+    .calendar{
+      display:grid;
+      grid-template-columns:repeat(7,minmax(0,1fr));
+      gap:8px;
+      margin-top:16px;
+    }
+    .day-name{text-align:center;color:var(--muted);font-size:12px;font-weight:900;padding:4px 0}
+    .calendar-day{
+      min-height:126px;
+      background:white;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:9px;
+      cursor:pointer;
+      transition:border-color .15s ease,box-shadow .15s ease;
+      min-width:0;
+    }
+    .calendar-day:hover{border-color:var(--primary-2);box-shadow:var(--focus)}
+    .day-num{font-weight:950;margin-bottom:8px}
+    .event-chip{
+      background:#eef2ff;
+      color:#1e3a8a;
+      border-radius:10px;
+      padding:6px;
+      margin-top:5px;
+      font-size:12px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .empty-day{opacity:.35;pointer-events:none}
+
+    @media(max-width:1180px){
+      .layout{grid-template-columns:1fr}
+      .nav{position:static;grid-template-columns:repeat(3,minmax(150px,1fr))}
+      .hero,.grid-3,.grid-2,.summary-row{grid-template-columns:1fr}
+      .expense-form,.bill-form,.event-form{grid-template-columns:1fr 1fr}
+      .event-form button,.expense-form button,.bill-form button{grid-column:1/-1}
+    }
+    @media(max-width:720px){
+      .app{padding:12px}
+      .topbar{position:static;grid-template-columns:1fr}
+      .date-time{justify-content:flex-start}
+      .pill{min-width:0;flex:1}
+      .nav{grid-template-columns:1fr 1fr}
+      .brand{align-items:flex-start}
+      .brand p{font-size:13px}
+      .quick-cards,.expense-form,.bill-form,.event-form,.wallet-item{grid-template-columns:1fr}
+      .wallet-item strong{text-align:left;padding-bottom:0}
+      .between{display:grid}
+      .calendar{gap:5px}
+      .calendar-day{min-height:100px;padding:7px;border-radius:12px}
+      .event-chip{font-size:11px;padding:5px}
+    }
+    @media(max-width:440px){
+      .nav{grid-template-columns:1fr}
+      .logo{width:40px;height:40px}
+      .brand h1{font-size:21px}
+      .date-time{display:grid;grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <h1>Art Ando CheckPoint</h1>
-        <p>Your money, bills, gym, and monthly schedule in one place because apparently life wanted tabs.</p>
+        <div class="logo">AA</div>
+        <div>
+          <h1>Art Ando CheckPoint</h1>
+          <p>Money, bills, workouts, and schedule tracking in one focused dashboard.</p>
+        </div>
       </div>
       <div class="date-time">
         <div class="pill" id="todayText">Date</div>
@@ -156,179 +425,186 @@
       </div>
     </header>
 
-    <nav class="nav">
-      <button class="active" onclick="showPage('portal', this)">Portal</button>
-      <button onclick="showPage('bills', this)">Bills</button>
-      <button onclick="showPage('money', this)">Money Left</button>
-      <button onclick="showPage('gym', this)">Gym Routine</button>
-      <button onclick="showPage('calendar', this)">Monthly Schedule</button>
-      <button onclick="showPage('expenses', this)">Expenses</button>
-    </nav>
+    <div class="layout">
+      <nav class="nav" aria-label="Main navigation">
+        <button class="active" onclick="showPage('portal', this)"><span class="icon">⌂</span><span>Portal</span></button>
+        <button onclick="showPage('bills', this)"><span class="icon">₱</span><span>Bills</span></button>
+        <button onclick="showPage('money', this)"><span class="icon">$</span><span>Money Left</span></button>
+        <button onclick="showPage('gym', this)"><span class="icon">✓</span><span>Gym Routine</span></button>
+        <button onclick="showPage('calendar', this)"><span class="icon">◇</span><span>Schedule</span></button>
+        <button onclick="showPage('expenses', this)"><span class="icon">−</span><span>Expenses</span></button>
+      </nav>
 
-    <main>
-      <section id="portal" class="page active">
-        <div class="portal-hero">
-          <div class="card">
-            <h2 class="big-title">Checkpoint Dashboard</h2>
-            <p class="muted">Click the buttons above to enter each area. This saves in your browser using localStorage, so do not clear browser data unless you enjoy financial amnesia.</p>
-            <div class="quick-cards">
-              <div class="quick-card"><span>Total Wallet Money</span><strong id="portalWallet">₱0.00</strong></div>
-              <div class="quick-card"><span>Money Saved</span><strong id="portalSaved">₱0.00</strong></div>
-              <div class="quick-card"><span>Gym Progress</span><strong id="portalGym">0%</strong></div>
+      <main>
+        <section id="portal" class="page active">
+          <div class="hero">
+            <div class="card hero-panel">
+              <div>
+                <h2 class="big-title">Checkpoint Dashboard</h2>
+                <p class="muted hero-copy">A cleaner command center for the numbers and habits you check most often. Data still saves to your browser first, then syncs to Firebase when available.</p>
+              </div>
+              <div class="quick-cards">
+                <div class="quick-card"><span>Total Wallet Money</span><strong id="portalWallet">₱0.00</strong></div>
+                <div class="quick-card"><span>Money Saved</span><strong id="portalSaved">₱0.00</strong></div>
+                <div class="quick-card"><span>Gym Progress</span><strong id="portalGym">0%</strong></div>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Overall Tracker</h2>
+              <div class="stat-grid">
+                <div class="stat"><span>Gym Attendance</span><strong id="overallGym">0 / 5 days</strong></div>
+                <div class="stat"><span>Money Saved</span><strong id="overallSaved">₱0.00</strong></div>
+                <div class="stat"><span>Money Spent</span><strong id="overallSpent">₱0.00</strong></div>
+                <div class="stat"><span>Bills Paid</span><strong id="overallBillsPaid">0</strong></div>
+                <div class="stat"><span>This Month's Events</span><strong id="overallEvents">0</strong></div>
+              </div>
             </div>
           </div>
-          <div class="card">
-            <h2>Overall Tracker</h2>
-            <div class="stat-grid" style="grid-template-columns:1fr">
-              <div class="stat"><span>Gym Attendance</span><strong id="overallGym">0 / 5 days</strong></div>
-              <div class="stat"><span>Money Saved</span><strong id="overallSaved">₱0.00</strong></div>
-              <div class="stat"><span>Money Spent</span><strong id="overallSpent">₱0.00</strong></div>
-              <div class="stat"><span># of Bills Paid</span><strong id="overallBillsPaid">0</strong></div>
-              <div class="stat"><span># of This Month's Events</span><strong id="overallEvents">0</strong></div>
-            </div>
+
+          <div class="grid grid-3 chart-grid">
+            <div class="card chart-wrap"><h3>Monthly Cost Graph</h3><canvas id="expensePie"></canvas></div>
+            <div class="card chart-wrap"><h3>Bills Graph</h3><canvas id="billPie"></canvas></div>
+            <div class="card chart-wrap"><h3>Gym Growth</h3><canvas id="gymPie"></canvas></div>
           </div>
-        </div>
+        </section>
 
-        <div class="grid grid-3" style="margin-top:18px">
-          <div class="card chart-wrap"><h3>Monthly Cost Graph</h3><canvas id="expensePie"></canvas></div>
-          <div class="card chart-wrap"><h3>Bills Graph</h3><canvas id="billPie"></canvas></div>
-          <div class="card chart-wrap"><h3>Gym Growth</h3><canvas id="gymPie"></canvas></div>
-        </div>
-      </section>
-
-      <section id="bills" class="page">
-        <div class="card">
-          <div class="between">
-            <div>
-              <h2>Bills Area</h2>
-              <p class="muted">Set your first and second semi-monthly pay, then assign bills to the pay where they should be deducted.</p>
-            </div>
-            <button class="btn secondary" onclick="resetBills()">Reset Bills</button>
-          </div>
-
-          <div class="pay-tabs">
-            <button id="firstPayTab" class="active" onclick="setActivePay('first')">First Semi-Monthly Pay</button>
-            <button id="secondPayTab" onclick="setActivePay('second')">Second Semi-Monthly Pay</button>
-          </div>
-
-          <div class="pay-summary">
-            <div class="summary-box"><span>Starting Pay</span><input type="number" id="activePayAmount" min="0" step="0.01" oninput="updateActivePayAmount()" /></div>
-            <div class="summary-box"><span>Total Bills Assigned</span><strong id="activeBillsTotal">₱0.00</strong></div>
-            <div class="summary-box"><span>Remaining After Bills</span><strong id="activeRemaining">₱0.00</strong></div>
-          </div>
-
-          <div class="bill-form">
-            <div><label>Bill Name</label><input id="billName" placeholder="Electricity, Water, Netflix, Loan" /></div>
-            <div><label>Amount</label><input id="billAmount" type="number" min="0" step="0.01" placeholder="0.00" /></div>
-            <div><label>Deduct From</label><select id="billPaySource"><option value="first">First Semi-Monthly Pay</option><option value="second">Second Semi-Monthly Pay</option></select></div>
-            <button class="btn" onclick="addBill()">Add Bill</button>
-          </div>
-
-          <table style="margin-top:18px">
-            <thead><tr><th>Paid</th><th>Bill</th><th>Amount</th><th>Deduct From</th><th>Action</th></tr></thead>
-            <tbody id="billRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="expenses" class="page">
-        <div class="card">
-          <div class="between">
-            <div>
-              <h2>Expenses</h2>
-              <p class="muted">Track anything you bought or spent. Choose whether it came from your first or second pay.</p>
-            </div>
-            <button class="btn secondary" onclick="resetExpenses()">Reset Expenses</button>
-          </div>
-
-          <div class="expense-form">
-            <div><label>What did you spend on?</label><input id="expenseName" placeholder="Food, Load, Orders, Luxury" /></div>
-            <div><label>Amount</label><input id="expenseAmount" type="number" min="0" step="0.01" placeholder="0.00" /></div>
-            <div><label>Used From</label><select id="expensePaySource"></select></div>
-            <button class="btn" onclick="addExpense()">Add Expense</button>
-          </div>
-
-          <div class="grid grid-3" style="margin-top:18px">
-            <div class="summary-box"><span>Total Expenses</span><strong id="expenseTotal">₱0.00</strong></div>
-            <div class="summary-box"><span>Wallet Expenses</span><strong id="firstExpenseTotal">₱0.00</strong></div>
-            <div class="summary-box"><span>Available Wallet Money</span><strong id="secondExpenseTotal">₱0.00</strong></div>
-          </div>
-
-          <table style="margin-top:18px">
-            <thead><tr><th>Item</th><th>Amount</th><th>Used From</th><th>Date</th><th>Action</th></tr></thead>
-            <tbody id="expenseRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="money" class="page">
-        <div class="grid grid-2">
+        <section id="bills" class="page">
           <div class="card">
             <div class="between">
-              <div><h2>Money Left</h2><p class="muted">Free wallet tracker. This is not connected to your semi-monthly pay.</p></div>
-              <button class="btn secondary" onclick="resetWallets()">Reset</button>
+              <div>
+                <h2>Bills Area</h2>
+                <p class="muted">Set your first and second semi-monthly pay, then assign bills to the pay where they should be deducted.</p>
+              </div>
+              <button class="btn secondary" onclick="resetBills()">Reset Bills</button>
             </div>
-            <div class="wallet-list" id="walletList"></div>
+
+            <div class="pay-tabs">
+              <button id="firstPayTab" class="active" onclick="setActivePay('first')">First Semi-Monthly Pay</button>
+              <button id="secondPayTab" onclick="setActivePay('second')">Second Semi-Monthly Pay</button>
+            </div>
+
+            <div class="summary-row">
+              <div class="summary-box"><span>Starting Pay</span><input type="number" id="activePayAmount" min="0" step="0.01" oninput="updateActivePayAmount()" /></div>
+              <div class="summary-box"><span>Total Bills Assigned</span><strong id="activeBillsTotal">₱0.00</strong></div>
+              <div class="summary-box"><span>Remaining After Bills</span><strong id="activeRemaining">₱0.00</strong></div>
+            </div>
+
+            <div class="form-grid bill-form">
+              <div><label>Bill Name</label><input id="billName" placeholder="Electricity, Water, Netflix, Loan" /></div>
+              <div><label>Amount</label><input id="billAmount" type="number" min="0" step="0.01" placeholder="0.00" /></div>
+              <div><label>Deduct From</label><select id="billPaySource"><option value="first">First Semi-Monthly Pay</option><option value="second">Second Semi-Monthly Pay</option></select></div>
+              <button class="btn" onclick="addBill()">Add Bill</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Paid</th><th>Bill</th><th>Amount</th><th>Deduct From</th><th>Action</th></tr></thead>
+                <tbody id="billRows"></tbody>
+              </table>
+            </div>
           </div>
+        </section>
+
+        <section id="expenses" class="page">
           <div class="card">
-            <h2>Total</h2>
-            <p class="muted">Sum of all wallets and banks.</p>
-            <div style="font-size:58px;font-weight:950;letter-spacing:-.07em;margin-top:30px" id="walletTotal">₱0.00</div>
-          </div>
-        </div>
-      </section>
+            <div class="between">
+              <div>
+                <h2>Expenses</h2>
+                <p class="muted">Track purchases and deduct them directly from the selected wallet source.</p>
+              </div>
+              <button class="btn secondary" onclick="resetExpenses()">Reset Expenses</button>
+            </div>
 
-      <section id="gym" class="page">
-        <div class="card">
-          <div class="between">
-            <div><h2>Gym Routine</h2><p class="muted">Check each exercise as completed. The chart updates automatically.</p></div>
-            <button class="btn secondary" onclick="resetGym()">Reset Gym Checks</button>
-          </div>
-          <div class="gym-days" id="gymDays"></div>
-        </div>
-      </section>
+            <div class="form-grid expense-form">
+              <div><label>What did you spend on?</label><input id="expenseName" placeholder="Food, Load, Orders, Luxury" /></div>
+              <div><label>Amount</label><input id="expenseAmount" type="number" min="0" step="0.01" placeholder="0.00" /></div>
+              <div><label>Used From</label><select id="expensePaySource"></select></div>
+              <button class="btn" onclick="addExpense()">Add Expense</button>
+            </div>
 
-      <section id="calendar" class="page">
-        <div class="card">
-          <div class="calendar-head">
-            <div><h2>Monthly Schedule</h2><p class="muted">Plain calendar view with time and schedule entry.</p></div>
-            <div class="row"><button class="btn secondary" onclick="changeMonth(-1)">Previous</button><strong id="calendarTitle"></strong><button class="btn secondary" onclick="changeMonth(1)">Next</button></div>
-          </div>
+            <div class="summary-row">
+              <div class="summary-box"><span>Total Expenses</span><strong id="expenseTotal">₱0.00</strong></div>
+              <div class="summary-box"><span>Wallet Expenses</span><strong id="firstExpenseTotal">₱0.00</strong></div>
+              <div class="summary-box"><span>Available Wallet Money</span><strong id="secondExpenseTotal">₱0.00</strong></div>
+            </div>
 
-          <div class="event-form">
-            <div><label>Date</label><input type="date" id="eventDate" /></div>
-            <div><label>Time</label><input type="time" id="eventTime" /></div>
-            <div><label>Schedule</label><input id="eventTitle" placeholder="Meeting, gym, payment deadline, church, travel" /></div>
-            <button class="btn" onclick="addEvent()">Add Event</button>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Item</th><th>Amount</th><th>Used From</th><th>Date</th><th>Action</th></tr></thead>
+                <tbody id="expenseRows"></tbody>
+              </table>
+            </div>
           </div>
+        </section>
 
-          <div class="calendar" id="calendarGrid" style="margin-top:18px"></div>
-        </div>
-      </section>
-    </main>
+        <section id="money" class="page">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="between">
+                <div><h2>Money Left</h2><p class="muted">Free wallet tracker. This is separate from your semi-monthly pay.</p></div>
+                <button class="btn secondary" onclick="resetWallets()">Reset</button>
+              </div>
+              <div class="wallet-list" id="walletList"></div>
+            </div>
+            <div class="card">
+              <h2>Total</h2>
+              <p class="muted">Sum of all wallets and banks.</p>
+              <div class="wallet-total" id="walletTotal">₱0.00</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="gym" class="page">
+          <div class="card">
+            <div class="between">
+              <div><h2>Gym Routine</h2><p class="muted">Check each exercise as completed. The dashboard chart updates automatically.</p></div>
+              <button class="btn secondary" onclick="resetGym()">Reset Gym Checks</button>
+            </div>
+            <div class="gym-days" id="gymDays"></div>
+          </div>
+        </section>
+
+        <section id="calendar" class="page">
+          <div class="card">
+            <div class="calendar-head">
+              <div><h2>Monthly Schedule</h2><p class="muted">Monthly calendar view with time-based schedule entries.</p></div>
+              <div class="row">
+                <button class="btn secondary" onclick="changeMonth(-1)">Previous</button>
+                <strong class="calendar-title" id="calendarTitle"></strong>
+                <button class="btn secondary" onclick="changeMonth(1)">Next</button>
+              </div>
+            </div>
+
+            <div class="form-grid event-form">
+              <div><label>Date</label><input type="date" id="eventDate" /></div>
+              <div><label>Time</label><input type="time" id="eventTime" /></div>
+              <div><label>Schedule</label><input id="eventTitle" placeholder="Meeting, gym, payment deadline, church, travel" /></div>
+              <button class="btn" onclick="addEvent()">Add Event</button>
+            </div>
+
+            <div class="calendar" id="calendarGrid"></div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     const firebaseConfig = {
-  apiKey: "AIzaSyAIbiCKrpp65XcTj00hEutQAhPwpQF0eGs",
-  authDomain: "task-list-65591.firebaseapp.com",
-  databaseURL: "https://task-list-65591-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "task-list-65591",
-  storageBucket: "task-list-65591.firebasestorage.app",
-  messagingSenderId: "654593976997",
-  appId: "1:654593976997:web:89591726e290c56fb93b4c"
-};
+      apiKey: "AIzaSyAIbiCKrpp65XcTj00hEutQAhPwpQF0eGs",
+      authDomain: "task-list-65591.firebaseapp.com",
+      databaseURL: "https://task-list-65591-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "task-list-65591",
+      storageBucket: "task-list-65591.firebasestorage.app",
+      messagingSenderId: "654593976997",
+      appId: "1:654593976997:web:89591726e290c56fb93b4c"
+    };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
     const peso = new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP'});
     const storeKey = 'artCheckpointV1';
     let activePay = 'first';
@@ -345,41 +621,55 @@ const db = getFirestore(app);
 
     let data = structuredClone(defaultData);
 
+    const walletNames = {
+      MoneyLeft:'Money Left',
+      Gcash:'Gcash',
+      Unionbank:'UnionBank',
+      Cash:'Cash',
+      SecurityBank:'Security Bank',
+      MoneyFromOtherPeople:'Money from other People'
+    };
+
     const gymRoutine = [
-      {day:'Day 1: Push Day', area:'Chest / Shoulders / Triceps', note:'Focus on controlling the eccentric lowering phase for 2-3 seconds.', exercises:['Dumbbell Incline Bench Press: 4 sets × 8-10 reps (rest 90s)','Cable Chest Flyes: 3 sets × 10-12 reps (rest 60s)','Machine Chest Press: 3 sets × 10-12 reps (rest 60s)','Seated Dumbbell Shoulder Press: 3 sets × 8-10 reps (rest 90s)','Cable Lateral Raises (Single Arm): 3 sets × 12-15 reps (rest 60s)','Cable Triceps Rope Pushdown: 3 sets × 10-12 reps (rest 60s)','Dumbbell Overhead Triceps Extension: 3 sets × 10-12 reps (rest 60s)']},
-      {day:'Day 2: Pull Day', area:'Back / Rear Delts / Biceps', note:'Maintain a tight core and squeeze the back muscles at the peak of each contraction.', exercises:['Chest-Supported T-Bar Row (Machine): 4 sets × 8-10 reps (rest 90s)','Cable Lat Pulldowns: 3 sets × 8-12 reps (rest 90s)','Single-Arm Cable Row: 3 sets × 10-12 reps (rest 60s)','Cable Face Pulls: 3 sets × 12-15 reps (rest 60s)','Dumbbell Incline Reverse Flyes: 3 sets × 12-15 reps (rest 60s)','Cable Bicep Curls (straight bar or rope): 3 sets × 10-12 reps (rest 60s)','Dumbbell Hammer Curls: 3 sets × 10-12 reps (rest 60s)']},
-      {day:'Day 3: Legs Day 1', area:'Quads / Calves', note:'Train through a full range of motion. Keep tension steady on the quads.', exercises:['Dumbbell Goblet Squats: 4 sets × 8-10 reps (rest 90s)','Leg Press Machine: 3 sets × 10-12 reps (rest 90s)','Leg Extension Machine: 3 sets × 12-15 reps (rest 60s)','Dumbbell Walking Lunges: 3 sets × 10-12 steps per leg (rest 90s)','Seated Calf Raise Machine: 4 sets × 15-20 reps (rest 60s)']},
-      {day:'Day 4: Upper Body', area:'Hypertrophy Focus', note:'Use this day to bring up lagging areas with higher reps and isolated movements.', exercises:['Cable Seated Row: 3 sets × 10-12 reps (rest 90s)','Dumbbell Bench Press: 3 sets × 10-12 reps (rest 90s)','Machine Pec Deck Fly: 3 sets × 12-15 reps (rest 60s)','Cable Upright Rows: 3 sets × 10-12 reps (rest 60s)','Dumbbell Alternating Bicep Curls: 3 sets × 10-12 reps (rest 60s)','Cable Triceps V-Bar Pushdown: 3 sets × 10-12 reps (rest 60s)']},
-      {day:'Day 5: Legs Day 2', area:'Hamstrings / Glutes / Core', note:'Hinge at the hips and stretch the hamstrings fully during deadlifts.', exercises:['Dumbbell Romanian Deadlifts: 4 sets × 8-10 reps (rest 90s)','Lying Leg Curl Machine: 3 sets × 10-12 reps (rest 60s)','Hip Abductor Machine: 3 sets × 15 reps (rest 60s)','Cable Pull-Throughs: 3 sets × 12-15 reps (rest 60s)','Cable Woodchoppers: 3 sets × 12 reps per side (rest 60s)','Leg Raise Machine or Captain\'s Chair: 3 sets × 12-15 reps (rest 60s)']}
+      {day:'Day 1: Push Day', area:'Chest / Shoulders / Triceps', note:'Focus on controlling the eccentric lowering phase for 2-3 seconds.', exercises:['Dumbbell Incline Bench Press: 4 sets x 8-10 reps (rest 90s)','Cable Chest Flyes: 3 sets x 10-12 reps (rest 60s)','Machine Chest Press: 3 sets x 10-12 reps (rest 60s)','Seated Dumbbell Shoulder Press: 3 sets x 8-10 reps (rest 90s)','Cable Lateral Raises (Single Arm): 3 sets x 12-15 reps (rest 60s)','Cable Triceps Rope Pushdown: 3 sets x 10-12 reps (rest 60s)','Dumbbell Overhead Triceps Extension: 3 sets x 10-12 reps (rest 60s)']},
+      {day:'Day 2: Pull Day', area:'Back / Rear Delts / Biceps', note:'Maintain a tight core and squeeze the back muscles at the peak of each contraction.', exercises:['Chest-Supported T-Bar Row (Machine): 4 sets x 8-10 reps (rest 90s)','Cable Lat Pulldowns: 3 sets x 8-12 reps (rest 90s)','Single-Arm Cable Row: 3 sets x 10-12 reps (rest 60s)','Cable Face Pulls: 3 sets x 12-15 reps (rest 60s)','Dumbbell Incline Reverse Flyes: 3 sets x 12-15 reps (rest 60s)','Cable Bicep Curls (straight bar or rope): 3 sets x 10-12 reps (rest 60s)','Dumbbell Hammer Curls: 3 sets x 10-12 reps (rest 60s)']},
+      {day:'Day 3: Legs Day 1', area:'Quads / Calves', note:'Train through a full range of motion. Keep tension steady on the quads.', exercises:['Dumbbell Goblet Squats: 4 sets x 8-10 reps (rest 90s)','Leg Press Machine: 3 sets x 10-12 reps (rest 90s)','Leg Extension Machine: 3 sets x 12-15 reps (rest 60s)','Dumbbell Walking Lunges: 3 sets x 10-12 steps per leg (rest 90s)','Seated Calf Raise Machine: 4 sets x 15-20 reps (rest 60s)']},
+      {day:'Day 4: Upper Body', area:'Hypertrophy Focus', note:'Use this day to bring up lagging areas with higher reps and isolated movements.', exercises:['Cable Seated Row: 3 sets x 10-12 reps (rest 90s)','Dumbbell Bench Press: 3 sets x 10-12 reps (rest 90s)','Machine Pec Deck Fly: 3 sets x 12-15 reps (rest 60s)','Cable Upright Rows: 3 sets x 10-12 reps (rest 60s)','Dumbbell Alternating Bicep Curls: 3 sets x 10-12 reps (rest 60s)','Cable Triceps V-Bar Pushdown: 3 sets x 10-12 reps (rest 60s)']},
+      {day:'Day 5: Legs Day 2', area:'Hamstrings / Glutes / Core', note:'Hinge at the hips and stretch the hamstrings fully during deadlifts.', exercises:['Dumbbell Romanian Deadlifts: 4 sets x 8-10 reps (rest 90s)','Lying Leg Curl Machine: 3 sets x 10-12 reps (rest 60s)','Hip Abductor Machine: 3 sets x 15 reps (rest 60s)','Cable Pull-Throughs: 3 sets x 12-15 reps (rest 60s)','Cable Woodchoppers: 3 sets x 12 reps per side (rest 60s)','Leg Raise Machine or Captain\\'s Chair: 3 sets x 12-15 reps (rest 60s)']}
     ];
 
     function loadData(){
-      try{return {...structuredClone(defaultData), ...(JSON.parse(localStorage.getItem(storeKey)) || {})};}
-      catch{return structuredClone(defaultData)}
+      try{
+        return normalizeData({...structuredClone(defaultData), ...(JSON.parse(localStorage.getItem(storeKey)) || {})});
+      }catch{
+        return structuredClone(defaultData);
+      }
     }
-  async function save(shouldRender = true){
 
-  localStorage.setItem(storeKey, JSON.stringify(data));
+    function normalizeData(raw){
+      return {
+        ...structuredClone(defaultData),
+        ...raw,
+        pays:{...defaultData.pays, ...(raw.pays || {})},
+        wallets:{...defaultData.wallets, ...(raw.wallets || {})},
+        bills:Array.isArray(raw.bills) ? raw.bills : [],
+        expenses:Array.isArray(raw.expenses) ? raw.expenses : [],
+        events:Array.isArray(raw.events) ? raw.events : [],
+        gym:raw.gym || {}
+      };
+    }
 
-  try{
+    async function save(shouldRender = true){
+      localStorage.setItem(storeKey, JSON.stringify(data));
+      try{
+        await setDoc(doc(db, "dashboardBackups", "checkpoint"), data);
+        console.log("Saved to Firebase");
+      }catch(error){
+        console.error("Firebase save failed, but local save worked:", error);
+      }
+      if(shouldRender) renderAll();
+    }
 
-    await setDoc(
-      doc(db, "dashboardBackups", "checkpoint"),
-      data
-    );
-
-    console.log("Saved to Firebase");
-
-  }catch(error){
-
-    console.error("Firebase save failed, but local save worked:", error);
-
-  }
-
-  if(shouldRender){
-    renderAll();
-  }
-}
     function money(n){return peso.format(Number(n || 0));}
     function val(id){return document.getElementById(id).value.trim();}
     function num(id){return Number(document.getElementById(id).value || 0);}
@@ -388,122 +678,74 @@ const db = getFirestore(app);
       document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-     if(btn){
-  btn.classList.add('active');
-}
+      if(btn) btn.classList.add('active');
       renderAll();
     }
-async function loadFirebaseData(){
 
-  try{
-
-    const docRef = doc(db, "dashboardBackups", "checkpoint");
-
-    const snapshot = await getDoc(docRef);
-
-    if(snapshot.exists()){
-
-      data = snapshot.data();
-
-      console.log("Firebase data loaded");
-
-    }else{
-
-      data = loadData();
-
-      console.log("Using local storage backup");
-
+    async function loadFirebaseData(){
+      try{
+        const snapshot = await getDoc(doc(db, "dashboardBackups", "checkpoint"));
+        data = snapshot.exists() ? normalizeData(snapshot.data()) : loadData();
+        renderAll();
+      }catch(error){
+        console.error(error);
+        data = loadData();
+        renderAll();
+      }
     }
 
-    renderAll();
-
-  }catch(error){
-
-    console.error(error);
-
-    data = loadData();
-
-    renderAll();
-  }
-
-}
     function updateClock(){
       const now = new Date();
       document.getElementById('todayText').textContent = now.toLocaleDateString('en-PH',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
       document.getElementById('timeText').textContent = now.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     }
-    setInterval(updateClock,1000); updateClock();
+    setInterval(updateClock,1000);
+    updateClock();
 
     function setActivePay(pay){activePay = pay; renderBills();}
     function updateActivePayAmount(){data.pays[activePay] = num('activePayAmount'); save();}
 
     function addBill(){
-      const name = val('billName'); const amount = num('billAmount'); const source = val('billPaySource');
-      if(!name || amount <= 0) return alert('Add a bill name and amount first. The machine refuses to guess your bills, sadly.');
+      const name = val('billName');
+      const amount = num('billAmount');
+      const source = val('billPaySource');
+      if(!name || amount <= 0) return alert('Add a bill name and amount first.');
       data.bills.push({id:crypto.randomUUID(), name, amount, source, paid:false, created:new Date().toISOString()});
-      document.getElementById('billName').value=''; document.getElementById('billAmount').value='';
+      document.getElementById('billName').value='';
+      document.getElementById('billAmount').value='';
       save();
     }
     function toggleBill(id){const b=data.bills.find(x=>x.id===id); if(b)b.paid=!b.paid; save();}
     function deleteBill(id){data.bills=data.bills.filter(x=>x.id!==id); save();}
     function resetBills(){if(confirm('Reset all bills?')){data.bills=[];data.pays={first:0,second:0};save();}}
 
-   function addExpense(){
+    function addExpense(){
+      const name = val('expenseName');
+      const amount = num('expenseAmount');
+      const source = val('expensePaySource');
+      if(!source) return alert('Please choose a wallet/source first.');
+      if(!name || amount <= 0) return alert('Add an expense name and amount first.');
+      if(data.wallets[source] === undefined) return alert('Choose a valid wallet/source.');
+      if(Number(data.wallets[source] || 0) < amount) return alert('Not enough money in this wallet.');
 
-  const name = val('expenseName');
-  const amount = num('expenseAmount');
-  const source = val('expensePaySource');
-  if(!source){
-  return alert('Please choose a wallet/source first.');
-}
+      data.wallets[source] = Number(data.wallets[source] || 0) - amount;
+      data.expenses.push({id:crypto.randomUUID(), name, amount, source, date:new Date().toISOString()});
+      document.getElementById('expenseName').value = '';
+      document.getElementById('expenseAmount').value = '';
+      save();
+    }
+    function deleteExpense(id){data.expenses = data.expenses.filter(x => x.id !== id); save();}
+    function resetExpenses(){if(confirm('Reset all expenses?')){data.expenses = []; save();}}
 
-  if(!name || amount <= 0){
-    return alert('Add an expense name and amount first.');
-  }
-
-  if(data.wallets[source] === undefined){
-    return alert('Choose a valid wallet/source.');
-  }
-
-  if(Number(data.wallets[source] || 0) < amount){
-    return alert('Not enough money in this wallet.');
-  }
-
-  data.wallets[source] =
-    Number(data.wallets[source] || 0) - amount;
-
-  data.expenses.push({
-    id: crypto.randomUUID(),
-    name,
-    amount,
-    source,
-    date: new Date().toISOString()
-  });
-
-  document.getElementById('expenseName').value = '';
-  document.getElementById('expenseAmount').value = '';
-
-  save();
-}
-    function deleteExpense(id){
-  data.expenses = data.expenses.filter(x => x.id !== id);
-  save();
-}
-    function resetExpenses(){
-  if(confirm('Reset all expenses?')){
-    data.expenses = [];
-    save();
-  }
-}
-
-function updateWallet(key, value){
-  data.wallets[key] = Number(value || 0);
-  save(false);
-  document.getElementById('walletTotal').textContent =
-    money(Object.values(data.wallets).reduce((s,v)=>s+Number(v||0),0));
-  document.getElementById('portalWallet').textContent =
-    document.getElementById('walletTotal').textContent;
-}
+    function updateWallet(key, value){
+      data.wallets[key] = Number(value || 0);
+      save(false);
+      const total = Object.values(data.wallets).reduce((s,v)=>s+Number(v||0),0);
+      document.getElementById('walletTotal').textContent = money(total);
+      document.getElementById('portalWallet').textContent = money(total);
+      document.getElementById('portalSaved').textContent = money(total);
+      document.getElementById('overallSaved').textContent = money(total);
+    }
     function resetWallets(){if(confirm('Reset all wallet amounts?')){Object.keys(data.wallets).forEach(k=>data.wallets[k]=0);save();}}
 
     function toggleExercise(key){data.gym[key]=!data.gym[key]; save();}
@@ -511,7 +753,7 @@ function updateWallet(key, value){
 
     function addEvent(){
       const date=val('eventDate'), time=val('eventTime'), title=val('eventTitle');
-      if(!date || !time || !title) return alert('Date, time, and schedule are required. Calendars are needy like that.');
+      if(!date || !time || !title) return alert('Date, time, and schedule are required.');
       data.events.push({id:crypto.randomUUID(),date,time,title});
       document.getElementById('eventTitle').value='';
       save();
@@ -540,28 +782,16 @@ function updateWallet(key, value){
     }
 
     function renderExpenses(){
-      const walletNames = {
-  MoneyLeft:'Money Left',
-  Gcash:'Gcash',
-  Unionbank:'UnionBank',
-  Cash:'Cash',
-  SecurityBank:'Security Bank',
-  MoneyFromOtherPeople:'Money from other People'
-};
+      const sourceSelect = document.getElementById('expensePaySource');
+      const selected = sourceSelect.value;
+      sourceSelect.innerHTML = Object.keys(data.wallets).map(k => `<option value="${k}">${walletNames[k] || k}</option>`).join('');
+      if(selected && data.wallets[selected] !== undefined) sourceSelect.value = selected;
 
-const sourceSelect = document.getElementById('expensePaySource');
-
-sourceSelect.innerHTML = Object.keys(data.wallets).map(k =>
-  `<option value="${k}">${walletNames[k] || k}</option>`
-).join('');
       const total=data.expenses.reduce((s,e)=>s+Number(e.amount),0);
-      const first = total;
-
-const second = Object.values(data.wallets)
-  .reduce((s,v)=>s + Number(v || 0),0);
+      const walletTotal = Object.values(data.wallets).reduce((s,v)=>s + Number(v || 0),0);
       document.getElementById('expenseTotal').textContent=money(total);
-      document.getElementById('firstExpenseTotal').textContent=money(first);
-      document.getElementById('secondExpenseTotal').textContent=money(second);
+      document.getElementById('firstExpenseTotal').textContent=money(total);
+      document.getElementById('secondExpenseTotal').textContent=money(walletTotal);
       document.getElementById('expenseRows').innerHTML = data.expenses.map(e=>`<tr>
         <td>${escapeHTML(e.name)}</td><td>${money(e.amount)}</td><td>${walletNames[e.source] || e.source}</td><td>${new Date(e.date).toLocaleDateString()}</td>
         <td><button class="btn danger" onclick="deleteExpense('${e.id}')">Delete</button></td>
@@ -569,8 +799,7 @@ const second = Object.values(data.wallets)
     }
 
     function renderWallets(){
-      const names={MoneyLeft:'Money Left',Gcash:'Gcash',Unionbank:'UnionBank',Cash:'Cash',SecurityBank:'Security Bank',MoneyFromOtherPeople:'Money from other People'};
-      document.getElementById('walletList').innerHTML = Object.keys(data.wallets).map(k=>`<div class="wallet-item"><div><label>${names[k]}</label><input type="number" min="0" step="0.01" value="${data.wallets[k]||''}" oninput="updateWallet('${k}',this.value)"></div><strong>${money(data.wallets[k])}</strong></div>`).join('');
+      document.getElementById('walletList').innerHTML = Object.keys(data.wallets).map(k=>`<div class="wallet-item"><div><label>${walletNames[k]}</label><input type="number" min="0" step="0.01" value="${data.wallets[k]||''}" oninput="updateWallet('${k}',this.value)"></div><strong>${money(data.wallets[k])}</strong></div>`).join('');
       const total=Object.values(data.wallets).reduce((s,v)=>s+Number(v||0),0);
       document.getElementById('walletTotal').textContent=money(total);
       document.getElementById('portalWallet').textContent=money(total);
@@ -578,7 +807,8 @@ const second = Object.values(data.wallets)
 
     function renderGym(){
       document.getElementById('gymDays').innerHTML = gymRoutine.map((d,di)=>`<div class="gym-day"><h3>${d.day}</h3><p class="muted"><strong>${d.area}</strong></p><p class="gym-note">${d.note}</p>${d.exercises.map((ex,ei)=>{
-        const key=`d${di}e${ei}`; const done=!!data.gym[key];
+        const key=`d${di}e${ei}`;
+        const done=!!data.gym[key];
         return `<label class="exercise ${done?'done':''}"><input type="checkbox" ${done?'checked':''} onchange="toggleExercise('${key}')"><span>${ex}</span></label>`;
       }).join('')}</div>`).join('');
     }
@@ -640,48 +870,76 @@ const second = Object.values(data.wallets)
     }
 
     function drawPie(canvasId, totals, emptyText){
-      const canvas=document.getElementById(canvasId); if(!canvas) return;
+      const canvas=document.getElementById(canvasId);
+      if(!canvas) return;
       const ctx=canvas.getContext('2d');
       const ratio=window.devicePixelRatio || 1;
       const w=canvas.clientWidth*ratio, h=canvas.clientHeight*ratio;
-      canvas.width=w; canvas.height=h; ctx.clearRect(0,0,w,h); ctx.scale(ratio,ratio);
+      canvas.width=w;
+      canvas.height=h;
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
       const entries=Object.entries(totals).filter(([,v])=>Number(v)>0);
       const cw=canvas.clientWidth, ch=canvas.clientHeight;
-      if(!entries.length){ctx.fillStyle='#707684';ctx.font='16px Segoe UI';ctx.fillText(emptyText,20,40);return;}
+      if(!entries.length){
+        ctx.fillStyle='#667085';
+        ctx.font='600 15px Segoe UI';
+        ctx.fillText(emptyText,18,40);
+        return;
+      }
       const total=entries.reduce((s,[,v])=>s+Number(v),0);
-      const cx=cw/2, cy=ch/2+10, r=Math.min(cw,ch)/3;
-      const colors=['#111827','#6366f1','#16a34a','#f59e0b','#dc2626','#0891b2','#9333ea','#475569'];
+      const cx=cw/2, cy=ch/2+8, r=Math.min(cw,ch)/3.25;
+      const colors=['#0f172a','#2563eb','#16a34a','#f59e0b','#dc2626','#0891b2','#7c3aed','#475569'];
       let start=-Math.PI/2;
       entries.forEach(([label,value],i)=>{
         const slice=(Number(value)/total)*Math.PI*2;
-        ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+slice);ctx.closePath();ctx.fillStyle=colors[i%colors.length];ctx.fill();
-        const mid=start+slice/2; const lx=cx+Math.cos(mid)*(r+24); const ly=cy+Math.sin(mid)*(r+24);
-        ctx.fillStyle='#111827';ctx.font='12px Segoe UI';ctx.fillText(label.substring(0,16),lx-25,ly);
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,start,start+slice);
+        ctx.closePath();
+        ctx.fillStyle=colors[i%colors.length];
+        ctx.fill();
+        const mid=start+slice/2;
+        const lx=cx+Math.cos(mid)*(r+26);
+        const ly=cy+Math.sin(mid)*(r+26);
+        ctx.fillStyle='#111827';
+        ctx.font='700 12px Segoe UI';
+        ctx.fillText(label.substring(0,15),Math.max(8,Math.min(cw-92,lx-28)),ly);
         start+=slice;
       });
     }
 
     function escapeHTML(str){return String(str).replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[m]));}
 
-    function renderAll(){renderBills();renderExpenses();renderWallets();renderGym();renderCalendar();renderStats();renderCharts();}
+    function renderAll(){
+      renderBills();
+      renderExpenses();
+      renderWallets();
+      renderGym();
+      renderCalendar();
+      renderStats();
+      renderCharts();
+    }
+
     window.addEventListener('resize', renderCharts);
     window.showPage = showPage;
-window.resetBills = resetBills;
-window.setActivePay = setActivePay;
-window.updateActivePayAmount = updateActivePayAmount;
-window.addBill = addBill;
-window.toggleBill = toggleBill;
-window.deleteBill = deleteBill;
-window.resetExpenses = resetExpenses;
-window.addExpense = addExpense;
-window.deleteExpense = deleteExpense;
-window.updateWallet = updateWallet;
-window.resetWallets = resetWallets;
-window.toggleExercise = toggleExercise;
-window.resetGym = resetGym;
-window.addEvent = addEvent;
-window.deleteEvent = deleteEvent;
-window.changeMonth = changeMonth;
+    window.resetBills = resetBills;
+    window.setActivePay = setActivePay;
+    window.updateActivePayAmount = updateActivePayAmount;
+    window.addBill = addBill;
+    window.toggleBill = toggleBill;
+    window.deleteBill = deleteBill;
+    window.resetExpenses = resetExpenses;
+    window.addExpense = addExpense;
+    window.deleteExpense = deleteExpense;
+    window.updateWallet = updateWallet;
+    window.resetWallets = resetWallets;
+    window.toggleExercise = toggleExercise;
+    window.resetGym = resetGym;
+    window.addEvent = addEvent;
+    window.deleteEvent = deleteEvent;
+    window.changeMonth = changeMonth;
+
     loadFirebaseData();
   </script>
 </body>
